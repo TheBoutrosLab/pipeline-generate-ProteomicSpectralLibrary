@@ -9,7 +9,6 @@ process convert_EasyPQP {
 
     input:
         tuple val(sample_name), path(id_file), path(mzml)
-        path convert_script
 
     output:
         tuple val(sample_name),
@@ -21,7 +20,7 @@ process convert_EasyPQP {
         def spectra_name = mzml.baseName.replaceFirst(/_(?:un)?calibrated$/, '')
         """
         set -euo pipefail
-        python "${convert_script}" convert \\
+        easypqp convert \\
             --pepxml "${id_file}" \\
             --spectra "${mzml}" \\
             --psms "${spectra_name}.psmpkl" \\
