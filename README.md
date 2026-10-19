@@ -35,12 +35,16 @@ sample-a,/data/sample-a_ProtLoom.idXML
 
 The `psm_tsv` and `peptide_tsv` parameters point to the cohort-level EasyPQP reports exported by `pipeline-validate-ProteomicPSM`. The required TSV columns are `Spectrum`, `Spectrum File`, `Peptide` for the PSM report and `Peptide`, `Gene`, `Protein ID` for the peptide report. Spectrum file names must match the mzML basenames in the mzML CSV.
 
+Set `idxml_score_type` to the exact primary score type or PeptideHit metadata key containing the desired score. Set `easypqp_score_type` to its meaning, exactly `PEP` or `q-value`. The pipeline first uses the primary score when its type matches; otherwise it reads the named hit metadata. It requires a finite score from 0 to 1 for every hit and writes a temporary EasyPQP-compatible idXML without changing the source. The defaults select the `ProtLoom PEP` primary score and label it `PEP`. If the input keeps a different primary score, set `idxml_score_type = 'protloom_pep'` to read ProtLoom's hit metadata instead. The input's `higher_score_better` value is preserved; because PEP and q-value are lower-is-better, an input marked higher-is-better is rejected rather than silently changed. Do not label a q-value as PEP: EasyPQP accepts `q-value`, but its idXML parser sets the separate PEP field to zero in that case.
+
 | Parameter | Required | Description |
 | --- | --- | --- |
 | `dataset_id` | Yes | Safe cohort name for the output directory and library filename. |
 | `mzml_csv` | Yes | CSV of `sample_name`, `fraction_id`, and mzML path for each run. |
 | `idxml_csv` | Yes | CSV of `sample_name` and merged idXML path for each sample. |
 | `fractionated` | No | Enable multiple mzML fractions per sample and IDRipper splitting; default `false`. |
+| `idxml_score_type` | No | Exact primary score type or hit metadata key to read; default `ProtLoom PEP`. |
+| `easypqp_score_type` | No | Meaning of the selected score: `PEP` or `q-value`; default `PEP`. |
 | `psm_tsv` | Yes | Cohort-level accepted PSM report. |
 | `peptide_tsv` | Yes | Cohort-level accepted peptide and protein report. |
 | `output_dir` | Yes | Root output directory. |
@@ -52,10 +56,11 @@ The `psm_tsv` and `peptide_tsv` parameters point to the cohort-level EasyPQP rep
 ## Pipeline steps
 
 1. When `fractionated = true`, `split_idXML` runs IDRipper once per multi-fraction sample, then matches each split idXML to a fraction's mzML basename. Single-fraction samples bypass this step.
-2. `convert_EasyPQP` runs once per matched fraction with `easypqp convert --pepxml --spectra --psms --peaks`. The pickle filenames use the mzML basename, which EasyPQP uses to pair peaks with PSMs during library generation.
-3. `library_EasyPQP` waits for all conversions, then runs once with every `.psmpkl` and `.peakpkl` plus `--psmtsv` and `--peptidetsv`. With both reports present, EasyPQP uses their PSM selection and protein labels instead of recalculating its own peptide and protein FDR.
+2. `set_EasyPQP_idXML_score` uses `SetIdXMLPrimaryScore.py` to write a separate idXML with the selected primary score for each fraction. The source script is mounted read-only from the pipeline's `src` directory.
+3. `convert_EasyPQP` runs once per matched fraction with `easypqp convert --pepxml --spectra --psms --peaks`. The pickle filenames use the mzML basename, which EasyPQP uses to pair peaks with PSMs during library generation.
+4. `library_EasyPQP` waits for all conversions, then runs once with every `.psmpkl` and `.peakpkl` plus `--psmtsv` and `--peptidetsv`. With both reports present, EasyPQP uses their PSM selection and protein labels instead of recalculating its own peptide and protein FDR.
 
-The workflow is shown in the editable [draw.io SVG](docs/pipeline-flow.drawio.svg).
+The workflow is shown in the [SVG schematic](docs/pipeline-flow.svg).
 
 ## Outputs
 
@@ -68,6 +73,7 @@ Results are written under `<output_dir>/generate-ProteomicSpectralLibrary-<versi
 | `output/EasyPQP/easypqp_*_reference_run.tsv` | RT or ion-mobility reference run, when generated. |
 | `output/EasyPQP/easypqp_*_report.pdf` | EasyPQP calibration report, when generated. |
 | `intermediate/IDRipper/<sample_name>/split/*.idXML` | Fraction-specific idXMLs when `save_intermediate_files = true`. |
+| `intermediate/EasyPQP/<sample_name>_<fraction_id>/<input_basename>_EasyPQP.idXML` | EasyPQP-compatible idXML when `save_intermediate_files = true`. |
 | `intermediate/EasyPQP/<sample_name>_<fraction_id>/*.pkl` | Per-fraction PSM and peak pickles when `save_intermediate_files = true`. |
 | `log-*/` | Nextflow trace, report, timeline, parameters, and process logs. |
 

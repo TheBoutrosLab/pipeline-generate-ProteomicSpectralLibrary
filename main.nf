@@ -5,6 +5,7 @@ nextflow.enable.dsl = 2
 include { convert_EasyPQP } from './module/convert_EasyPQP.nf'
 include { library_EasyPQP } from './module/library_EasyPQP.nf'
 include { split_idXML } from './module/split_idXML.nf'
+include { set_EasyPQP_idXML_score } from './module/set_EasyPQP_idXML_score.nf'
 
 /** Read one merged idXML per biological sample. */
 def indexIdentifications(List rows, def csv) {
@@ -141,6 +142,7 @@ log.info """\
         mzML CSV: ${params.mzml_csv}
         idXML CSV: ${params.idxml_csv}
         Fractionated: ${params.fractionated}
+        idXML score: ${params.idxml_score_type} (${params.easypqp_score_type})
         Cohort reports: ${params.psm_tsv}, ${params.peptide_tsv}
         Output: ${params.output_dir_base}
         OpenMS image: ${params.docker_image_openms}
@@ -167,7 +169,8 @@ workflow {
             tuple("${sampleName}_${fractions[0].fractionId}", idxml, fractions[0].mzml)
         }
     }
-    convert_EasyPQP(pairedFractions)
+    set_EasyPQP_idXML_score(pairedFractions)
+    convert_EasyPQP(set_EasyPQP_idXML_score.out.prepared)
 
     converted = convert_EasyPQP.out.converted
         .collect(flat: false)

@@ -17,6 +17,15 @@ fractionated:
   type: 'Bool'
   default: false
   help: 'Allow multiple mzML fractions per sample and split merged idXMLs with IDRipper'
+idxml_score_type:
+  type: 'String'
+  default: 'ProtLoom PEP'
+  help: 'Exact idXML primary score type or PeptideHit metadata key to read'
+easypqp_score_type:
+  type: 'String'
+  choices: ['PEP', 'q-value']
+  default: 'PEP'
+  help: 'Meaning of the selected score; use the exact score type required by EasyPQP'
 psm_tsv:
   type: 'Path'
   mode: 'r'

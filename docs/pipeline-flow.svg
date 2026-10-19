@@ -56,9 +56,11 @@
             <path d="M1015,299L1037,299L1037,218L1051,218" style="fill:none;fill-rule:nonzero;stroke:rgb(112,131,153);stroke-width:2.5px;"/>
         </g>
         <g transform="matrix(1,-0,-0,1,-0,76)">
-            <path d="M1160.438,337.75L1152,349L1143.562,337.75L1160.438,337.75Z" style="fill:rgb(112,131,153);fill-rule:nonzero;"/>
-            <path d="M1152,246L1152,340" style="fill:none;fill-rule:nonzero;stroke:rgb(112,131,153);stroke-width:2.5px;"/>
+            <path d="M1160.438,251.75L1152,263L1143.562,251.75L1160.438,251.75Z" style="fill:rgb(112,131,153);fill-rule:nonzero;"/>
+            <path d="M1152,246L1152,254" style="fill:none;fill-rule:nonzero;stroke:rgb(112,131,153);stroke-width:2.5px;"/>
         </g>
+        <path d="M1152,399L1152,417" style="fill:none;stroke:rgb(112,131,153);stroke-width:2.5px;"/>
+        <path d="M1143.562,414L1152,425L1160.438,414Z" style="fill:rgb(112,131,153);"/>
         <g transform="matrix(1,0,0,0.417476,-3,375.572816)">
             <g transform="matrix(1,-0,-0,2.395349,3,-717.581395)">
                 <path d="M1157.438,465.75L1149,477L1140.562,465.75L1157.438,465.75Z" style="fill:rgb(112,131,153);fill-rule:nonzero;"/>
@@ -117,10 +119,17 @@
         </g>
         <path d="M1245,236L1245,306C1245,314.831 1237.831,322 1229,322L1076,322C1067.169,322 1060,314.831 1060,306L1060,236C1060,227.169 1067.169,220 1076,220L1229,220C1237.831,220 1245,227.169 1245,236Z" style="fill:rgb(232,247,247);stroke:rgb(56,143,148);stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;"/>
         <g transform="matrix(1,0,0,1,1152.5,258)">
-            <text x="-70.871px" y="0px" style="font-family:'Helvetica';font-size:18px;fill:rgb(24,48,71);">EasyPQP<tspan x="6.842px 11.843px " y="0px 0px "> c</tspan>onvert</text>
+            <text x="-93px" y="0px" style="font-family:'Helvetica';font-size:17px;fill:rgb(24,48,71);">Set idXML primary score</text>
         </g>
         <g transform="matrix(1,0,0,1,1152.5,283)">
-            <text x="-55.758px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(82,103,125);">once per mzML<tspan x="33.357px 36.969px " y="0px 0px "> r</tspan>un</text>
+            <text x="-64px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(82,103,125);">PEP or q-value · per run</text>
+        </g>
+        <path d="M1245,355L1245,383C1245,391.831 1237.831,399 1229,399L1076,399C1067.169,399 1060,391.831 1060,383L1060,355C1060,346.169 1067.169,339 1076,339L1229,339C1237.831,339 1245,346.169 1245,355Z" style="fill:rgb(232,247,247);stroke:rgb(56,143,148);stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;"/>
+        <g transform="matrix(1,0,0,1,1152.5,367)">
+            <text x="-71px" y="0px" style="font-family:'Helvetica';font-size:18px;fill:rgb(24,48,71);">EasyPQP convert</text>
+        </g>
+        <g transform="matrix(1,0,0,1,1152.5,389)">
+            <text x="-54px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(82,103,125);">once per mzML run</text>
         </g>
         <path d="M1245,441L1245,492C1245,500.831 1237.831,508 1229,508L1068,508C1059.169,508 1052,500.831 1052,492L1052,441C1052,432.169 1059.169,425 1068,425L1229,425C1237.831,425 1245,432.169 1245,441Z" style="fill:rgb(232,247,247);stroke:rgb(56,143,148);stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;"/>
         <g transform="matrix(1,0,0,1,1148.5,463)">
