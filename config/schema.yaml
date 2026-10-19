@@ -2,73 +2,95 @@
 dataset_id:
   type: 'String'
   required: true
-  help: 'Dataset identifier'
-patient_id:
-  type: 'String'
+  help: 'Cohort identifier used for the output directory and library filename'
+mzml_csv:
+  type: 'Path'
+  mode: 'r'
   required: true
-  help: 'Patient identifier'
-sample_id:
-  type: 'String'
+  help: 'CSV with sample_name,fraction_id,mzML columns; one raw fraction per row'
+idxml_csv:
+  type: 'Path'
+  mode: 'r'
   required: true
-  help: 'Sample identifier'
-param_name:
+  help: 'CSV with sample_name,idXML columns; one merged identification file per sample'
+fractionated:
+  type: 'Bool'
+  default: false
+  help: 'Allow multiple mzML fractions per sample and split merged idXMLs with IDRipper'
+idxml_score_type:
   type: 'String'
-  required: false
-  default: 'foo-bar'
-  help: 'Example pipeline parameter; replace with pipeline-specific parameters'
+  default: 'ProtLoom PEP'
+  help: 'Exact idXML primary score type or PeptideHit metadata key to read'
+easypqp_score_type:
+  type: 'String'
+  choices: ['PEP', 'q-value']
+  default: 'PEP'
+  help: 'Meaning of the selected score; use the exact score type required by EasyPQP'
+psm_tsv:
+  type: 'Path'
+  mode: 'r'
+  required: true
+  help: 'Cohort-level EasyPQP psm.tsv report'
+peptide_tsv:
+  type: 'Path'
+  mode: 'r'
+  required: true
+  help: 'Cohort-level EasyPQP peptide.tsv report'
 output_dir:
   type: 'Path'
   mode: 'w'
   required: true
-  help: 'Absolute path to output directory'
+  help: 'Root output directory'
+save_intermediate_files:
+  type: 'Bool'
+  default: false
+  help: 'Publish per-run PSM and peak pickle files'
+easypqp_version:
+  type: 'String'
+  default: '0.1.59'
+  help: 'EasyPQP container version'
+docker_image_easypqp:
+  type: 'String'
+  required: false
+  help: 'EasyPQP container image; defaults to ghcr.io/theboutroslab/easypqp:0.1.59'
+openms_version:
+  type: 'String'
+  default: '3.5.0'
+  help: 'OpenMS version used for IDRipper'
+docker_image_openms:
+  type: 'String'
+  required: false
+  help: 'OpenMS container image; defaults to ghcr.io/theboutroslab/openms-thirdparty:3.5.0'
+work_dir:
+  type: 'Path'
+  mode: 'w'
+  required: false
+  help: 'Nextflow working directory; prefer scratch space for large mzML inputs'
 apptainer_library:
   type: 'Path'
   mode: 'r'
   required: false
-  help: 'Absolute path to Apptainer library directory'
+  help: 'Apptainer library directory'
 apptainer_cache:
   type: 'Path'
   mode: 'w'
   required: false
-  help: 'Absolute path to Apptainer cache directory'
-singularity_library:
-  type: 'Path'
-  mode: 'r'
-  required: false
-  help: 'Absolute path to Singularity library directory'
-singularity_cache:
-  type: 'Path'
-  mode: 'w'
-  required: false
-  help: 'Absolute path to Singularity cache directory'
+  help: 'Apptainer cache directory'
 base_resource_update:
   type: 'ResourceUpdateNamespace'
   required: false
-  help: 'User-defined modifications for adjusting base resource allocations for processes'
+  help: 'User-defined process memory and CPU adjustments'
   elements:
     memory:
       type: 'ResourceUpdateList'
       required: false
-      help: 'List of memory updates'
+      help: 'Memory adjustments'
     cpus:
       type: 'ResourceUpdateList'
       required: false
-      help: 'List of CPU updates'
-input:
-  type: 'InputNamespace'
-  required: true
-  help: 'Input samples'
-  elements:
-    BAM:
-      type: 'InputBAMNamespace'
-      required: true
-      help: 'Input BAM samples grouped by sample type'
-      elements:
-        normal:
-          type: 'BAMEntryList'
-          required: false
-          help: 'Input normal sample'
-        tumor:
-          type: 'BAMEntryList'
-          required: false
-          help: 'Input tumor sample'
+      help: 'CPU adjustments'
+resource_allocation_profile_tag:
+  type: 'String'
+  choices: ['default']
+  default: 'default'
+  help: 'Process-specific resource allocation profile'

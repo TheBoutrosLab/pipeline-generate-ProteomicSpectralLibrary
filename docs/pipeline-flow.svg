@@ -1,17 +1,163 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="147px" preserveAspectRatio="none" style="width:155px;height:147px;background:#FFFFFF;" version="1.1" viewBox="0 0 155 147" width="155px" zoomAndPan="magnify"><defs/><g><rect height="26.2969" style="stroke:#00000000;stroke-width:1.0;fill:none;" width="122" x="15" y="15"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="112" x="20" y="32.9951">Pipeline Steps</text><rect fill="#F1F1F1" height="33.9688" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="61" x="47" y="48.2969"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="41" x="57" y="69.4355">Step 1</text><rect fill="#F1F1F1" height="33.9688" rx="12.5" ry="12.5" style="stroke:#181818;stroke-width:0.5;" width="61" x="47" y="102.2656"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="41" x="57" y="123.4043">Step 2</text><line style="stroke:#181818;stroke-width:1.0;" x1="77.5" x2="77.5" y1="82.2656" y2="102.2656"/><polygon fill="#181818" points="73.5,92.2656,77.5,102.2656,81.5,92.2656,77.5,96.2656" style="stroke:#181818;stroke-width:1.0;"/><!--MD5=[3268894d5293ebac3f2a5a59709d4758]
-@startuml
-title Pipeline Steps
-
-:Step 1;
-:Step 2;
-
-@enduml
-
-PlantUML version 1.2022.6(Tue Jun 21 17:34:49 GMT 2022)
-(GPL source distribution)
-Java Runtime: OpenJDK Runtime Environment
-JVM: OpenJDK 64-Bit Server VM
-Default Encoding: UTF-8
-Language: en
-Country: US
---></g></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 1280 574" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;">
+    <g id="Artboard1" transform="matrix(1,0,0,1,0,-76)">
+        <rect x="0" y="76" width="1280" height="574" style="fill:none;"/>
+        <g transform="matrix(1,0,0,0.844118,0,76)">
+            <rect x="0" y="0" width="1280" height="680" style="fill:white;"/>
+        </g>
+        <g transform="matrix(1,0,0,1,50,125)">
+            <text x="0px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(90,130,183);">I<tspan x="3.742px 13.26px 22.061px 31.579px 39.65px " y="0px 0px 0px 0px 0px ">NPUTS</tspan></text>
+        </g>
+        <g transform="matrix(1,0,0,1,389,200)">
+            <text x="0px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(78,154,114);">P<tspan x="7.842px 16.643px 20.385px 29.903px 33.645px 42.446px 51.018px 54.76px 63.561px 72.362px 83.321px 92.122px 99.482px " y="0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px ">AIR BY SAMPLE</tspan></text>
+        </g>
+        <g transform="matrix(1,0,0,1,820,103)">
+            <text x="0px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(138,104,181);">F<tspan x="8.071px 17.589px 26.39px 35.908px 43.979px 47.721px 57.963px 67.481px 75.323px 83.394px 92.195px 101.713px 105.455px 114.256px 123.057px 134.016px 142.817px 150.177px " y="0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px ">RACTIONATED SAMPLE</tspan></text>
+        </g>
+        <g transform="matrix(1,0,0,1,847,313)">
+            <text x="0px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(138,104,181);">S<tspan x="8.801px 12.543px 22.061px 32.303px 39.663px 48.464px 52.205px 60.276px 69.795px 78.595px 88.114px 96.185px 99.926px 110.168px " y="0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px 0px ">INGLE FRACTION</tspan></text>
+        </g>
+        <g transform="matrix(1,0,0,1,822,490)">
+            <text x="0px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(56,143,148);">C<tspan x="9.518px 19.76px 29.278px 39.52px " y="0px 0px 0px 0px ">OHOR</tspan>T <tspan x="59.683px 68.484px 77.285px 86.086px 94.887px 105.846px 114.647px 121.048px " y="0px 0px 0px 0px 0px 0px 0px 0px ">ASSEMBLY</tspan></text>
+        </g>
+        <g transform="matrix(1,-0,-0,1,-0,76)">
+            <path d="M328.75,160.562L340,169L328.75,177.438L328.75,160.562Z" style="fill:rgb(112,131,153);fill-rule:nonzero;"/>
+            <path d="M280,116L310,116L310,169L331,169" style="fill:none;fill-rule:nonzero;stroke:rgb(112,131,153);stroke-width:2.5px;"/>
+        </g>
+        <g transform="matrix(1,-0,-0,1,-0,76)">
+            <path d="M328.75,202.562L340,211L328.75,219.438L328.75,202.562Z" style="fill:rgb(112,131,153);fill-rule:nonzero;"/>
+            <path d="M280,251L310,251L310,211L331,211" style="fill:none;fill-rule:nonzero;stroke:rgb(112,131,153);stroke-width:2.5px;"/>
+        </g>
+        <g transform="matrix(1,-0,-0,1,-0,76)">
+            <path d="M593.75,181.562L605,190L593.75,198.438L593.75,181.562Z" style="fill:rgb(112,131,153);fill-rule:nonzero;"/>
+            <path d="M555,190L596,190" style="fill:none;fill-rule:nonzero;stroke:rgb(112,131,153);stroke-width:2.5px;"/>
+        </g>
+        <g transform="matrix(1,-0,-0,1,-0,76)">
+            <path d="M788.75,78.562L800,87L788.75,95.437L788.75,78.562Z" style="fill:rgb(112,131,153);fill-rule:nonzero;"/>
+            <path d="M730,172L760,172L760,87L791,87" style="fill:none;fill-rule:nonzero;stroke:rgb(112,131,153);stroke-width:2.5px;"/>
+        </g>
+        <g transform="matrix(1,0,0,1,724,223)">
+            <text x="0px" y="0px" style="font-family:'Helvetica';font-size:20px;fill:rgb(75,97,120);">yes</text>
+        </g>
+        <g transform="matrix(1,-0,-0,1,-0,76)">
+            <path d="M788.75,290.562L800,299L788.75,307.438L788.75,290.562Z" style="fill:rgb(112,131,153);fill-rule:nonzero;"/>
+            <path d="M730,216L760,216L760,299L791,299" style="fill:none;fill-rule:nonzero;stroke:rgb(112,131,153);stroke-width:2.5px;"/>
+        </g>
+        <g transform="matrix(1,0,0,1,730,326)">
+            <text x="0px" y="0px" style="font-family:'Helvetica';font-size:20px;fill:rgb(75,97,120);">no</text>
+        </g>
+        <g transform="matrix(1,-0,-0,1,-0,76)">
+            <path d="M1048.75,163.562L1060,172L1048.75,180.438L1048.75,163.562Z" style="fill:rgb(112,131,153);fill-rule:nonzero;"/>
+            <path d="M1015,87L1037,87L1037,172L1051,172" style="fill:none;fill-rule:nonzero;stroke:rgb(112,131,153);stroke-width:2.5px;"/>
+        </g>
+        <g transform="matrix(1,-0,-0,1,-0,76)">
+            <path d="M1048.75,209.562L1060,218L1048.75,226.438L1048.75,209.562Z" style="fill:rgb(112,131,153);fill-rule:nonzero;"/>
+            <path d="M1015,299L1037,299L1037,218L1051,218" style="fill:none;fill-rule:nonzero;stroke:rgb(112,131,153);stroke-width:2.5px;"/>
+        </g>
+        <g transform="matrix(1,-0,-0,1,-0,76)">
+            <path d="M1160.438,251.75L1152,263L1143.562,251.75L1160.438,251.75Z" style="fill:rgb(112,131,153);fill-rule:nonzero;"/>
+            <path d="M1152,246L1152,254" style="fill:none;fill-rule:nonzero;stroke:rgb(112,131,153);stroke-width:2.5px;"/>
+        </g>
+        <path d="M1152,399L1152,417" style="fill:none;stroke:rgb(112,131,153);stroke-width:2.5px;"/>
+        <path d="M1143.562,414L1152,425L1160.438,414Z" style="fill:rgb(112,131,153);"/>
+        <g transform="matrix(1,0,0,0.417476,-3,375.572816)">
+            <g transform="matrix(1,-0,-0,2.395349,3,-717.581395)">
+                <path d="M1157.438,465.75L1149,477L1140.562,465.75L1157.438,465.75Z" style="fill:rgb(112,131,153);fill-rule:nonzero;"/>
+                <path d="M1149,434L1149,468" style="fill:none;fill-rule:nonzero;stroke:rgb(112,131,153);stroke-width:2.5px;"/>
+            </g>
+        </g>
+        <g transform="matrix(1,-0,-0,1,-0,76)">
+            <path d="M996.25,476.438L985,468L996.25,459.562L996.25,476.438Z" style="fill:rgb(112,131,153);fill-rule:nonzero;"/>
+            <path d="M1052,390L1018,390L1018,468L994,468" style="fill:none;fill-rule:nonzero;stroke:rgb(112,131,153);stroke-width:2.5px;"/>
+        </g>
+        <g transform="matrix(1,-0,-0,1,-0,76)">
+            <path d="M758.75,459.562L770,468L758.75,476.438L758.75,459.562Z" style="fill:rgb(112,131,153);fill-rule:nonzero;"/>
+            <path d="M680,468L761,468" style="fill:none;fill-rule:nonzero;stroke:rgb(112,131,153);stroke-width:2.5px;"/>
+        </g>
+        <path d="M280,161L280,223C280,231.831 272.831,239 264,239L66,239C57.169,239 50,231.831 50,223L50,161C50,152.169 57.169,145 66,145L264,145C272.831,145 280,152.169 280,161Z" style="fill:rgb(234,243,255);stroke:rgb(90,130,183);stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;"/>
+        <g transform="matrix(1,0,0,1,165,183)">
+            <text x="-45.176px" y="0px" style="font-family:'Helvetica';font-size:18px;fill:rgb(24,48,71);">mzML<tspan x="3.164px 8.165px " y="0px 0px "> C</tspan>SV</text>
+        </g>
+        <g transform="matrix(1,0,0,1,165,208)">
+            <text x="-99.347px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(82,103,125);">sample_name · fraction_id · mzML</text>
+        </g>
+        <path d="M280,296L280,358C280,366.831 272.831,374 264,374L66,374C57.169,374 50,366.831 50,358L50,296C50,287.169 57.169,280 66,280L264,280C272.831,280 280,287.169 280,296Z" style="fill:rgb(234,243,255);stroke:rgb(90,130,183);stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;"/>
+        <g transform="matrix(1,0,0,1,165,318)">
+            <text x="-46.187px" y="0px" style="font-family:'Helvetica';font-size:18px;fill:rgb(24,48,71);">idXML<tspan x="4.175px 9.176px " y="0px 0px "> C</tspan>SV</text>
+        </g>
+        <g transform="matrix(1,0,0,1,165,343)">
+            <text x="-84.671px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(82,103,125);">one idXML<tspan x="-22.998px -19.386px " y="0px 0px "> p</tspan>er sample_name</text>
+        </g>
+        <path d="M555,231L555,301C555,309.831 547.831,317 539,317L356,317C347.169,317 340,309.831 340,301L340,231C340,222.169 347.169,215 356,215L539,215C547.831,215 555,222.169 555,231Z" style="fill:rgb(237,247,242);stroke:rgb(78,154,114);stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;"/>
+        <g transform="matrix(1,0,0,1,447.5,253)">
+            <text x="-82.538px" y="0px" style="font-family:'Helvetica';font-size:18px;fill:rgb(24,48,71);">Match sample inputs</text>
+        </g>
+        <g transform="matrix(1,0,0,1,447.5,278)">
+            <text x="-87.439px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(82,103,125);">validate paths and fraction IDs</text>
+        </g>
+        <path d="M667.5,220L730,270L667.5,320L605,270L667.5,220Z" style="fill:rgb(255,244,221);fill-rule:nonzero;stroke:rgb(199,141,45);stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;"/>
+        <g transform="matrix(1,0,0,1,667.5,262)">
+            <text x="-29.289px" y="0px" style="font-family:'Helvetica';font-size:17px;fill:rgb(24,48,71);">Multiple</text>
+        </g>
+        <g transform="matrix(1,0,0,1,667.5,287)">
+            <text x="-26.013px" y="0px" style="font-family:'Helvetica';font-size:12px;fill:rgb(82,103,125);">fractions?</text>
+        </g>
+        <path d="M1015,134L1015,192C1015,200.831 1007.831,208 999,208L816,208C807.169,208 800,200.831 800,192L800,134C800,125.169 807.169,118 816,118L999,118C1007.831,118 1015,125.169 1015,134Z" style="fill:rgb(242,235,255);stroke:rgb(138,104,181);stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;"/>
+        <g transform="matrix(1,0,0,1,907.5,156)">
+            <text x="-35.512px" y="0px" style="font-family:'Helvetica';font-size:18px;fill:rgb(24,48,71);">IDRipper</text>
+        </g>
+        <g transform="matrix(1,0,0,1,907.5,181)">
+            <text x="-83.567px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(82,103,125);">split merged idXML<tspan x="27.225px 30.837px " y="0px 0px "> b</tspan>y mzML</text>
+        </g>
+        <path d="M1015,346L1015,404C1015,412.831 1007.831,420 999,420L816,420C807.169,420 800,412.831 800,404L800,346C800,337.169 807.169,330 816,330L999,330C1007.831,330 1015,337.169 1015,346Z" style="fill:rgb(242,235,255);stroke:rgb(138,104,181);stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;"/>
+        <g transform="matrix(1,0,0,1,907.5,368)">
+            <text x="-74.694px" y="0px" style="font-family:'Helvetica';font-size:18px;fill:rgb(24,48,71);">Use idXML<tspan x="12.678px 17.679px " y="0px 0px "> d</tspan>irectly</text>
+        </g>
+        <g transform="matrix(1,0,0,1,907.5,393)">
+            <text x="-40.104px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(82,103,125);">single fraction</text>
+        </g>
+        <path d="M1245,236L1245,306C1245,314.831 1237.831,322 1229,322L1076,322C1067.169,322 1060,314.831 1060,306L1060,236C1060,227.169 1067.169,220 1076,220L1229,220C1237.831,220 1245,227.169 1245,236Z" style="fill:rgb(232,247,247);stroke:rgb(56,143,148);stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;"/>
+        <g transform="matrix(1,0,0,1,1152.5,258)">
+            <text x="-93px" y="0px" style="font-family:'Helvetica';font-size:17px;fill:rgb(24,48,71);">Set idXML primary score</text>
+        </g>
+        <g transform="matrix(1,0,0,1,1152.5,283)">
+            <text x="-64px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(82,103,125);">PEP or q-value · per run</text>
+        </g>
+        <path d="M1245,355L1245,383C1245,391.831 1237.831,399 1229,399L1076,399C1067.169,399 1060,391.831 1060,383L1060,355C1060,346.169 1067.169,339 1076,339L1229,339C1237.831,339 1245,346.169 1245,355Z" style="fill:rgb(232,247,247);stroke:rgb(56,143,148);stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;"/>
+        <g transform="matrix(1,0,0,1,1152.5,367)">
+            <text x="-71px" y="0px" style="font-family:'Helvetica';font-size:18px;fill:rgb(24,48,71);">EasyPQP convert</text>
+        </g>
+        <g transform="matrix(1,0,0,1,1152.5,389)">
+            <text x="-54px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(82,103,125);">once per mzML run</text>
+        </g>
+        <path d="M1245,441L1245,492C1245,500.831 1237.831,508 1229,508L1068,508C1059.169,508 1052,500.831 1052,492L1052,441C1052,432.169 1059.169,425 1068,425L1229,425C1237.831,425 1245,432.169 1245,441Z" style="fill:rgb(232,247,247);stroke:rgb(56,143,148);stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;"/>
+        <g transform="matrix(1,0,0,1,1148.5,463)">
+            <text x="-79.286px" y="0px" style="font-family:'Helvetica';font-size:18px;fill:rgb(24,48,71);">PSM + peak pickles</text>
+        </g>
+        <g transform="matrix(1,0,0,1,1148.5,488)">
+            <text x="-48.414px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(82,103,125);">all runs collected</text>
+        </g>
+        <path d="M680,521L680,567C680,575.831 672.831,583 664,583L411,583C402.169,583 395,575.831 395,567L395,521C395,512.169 402.169,505 411,505L664,505C672.831,505 680,512.169 680,521Z" style="fill:rgb(234,243,255);stroke:rgb(90,130,183);stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;"/>
+        <g transform="matrix(1,0,0,1,537.5,543)">
+            <text x="-57.524px" y="0px" style="font-family:'Helvetica';font-size:18px;fill:rgb(24,48,71);">Cohort reports</text>
+        </g>
+        <g transform="matrix(1,0,0,1,537.5,568)">
+            <text x="-61.236px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(82,103,125);">psm.tsv + peptide.tsv</text>
+        </g>
+        <path d="M985,521L985,567C985,575.831 977.831,583 969,583L786,583C777.169,583 770,575.831 770,567L770,521C770,512.169 777.169,505 786,505L969,505C977.831,505 985,512.169 985,521Z" style="fill:rgb(232,247,247);stroke:rgb(56,143,148);stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;"/>
+        <g transform="matrix(1,0,0,1,877.5,543)">
+            <text x="-65.861px" y="0px" style="font-family:'Helvetica';font-size:18px;fill:rgb(24,48,71);">EasyPQP<tspan x="11.852px 16.853px " y="0px 0px "> l</tspan>ibrary</text>
+        </g>
+        <g transform="matrix(1,0,0,1,877.5,568)">
+            <text x="-50.219px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(82,103,125);">one cohort library</text>
+        </g>
+        <path d="M1245,571L1245,617C1245,625.831 1237.831,633 1229,633L1068,633C1059.169,633 1052,625.831 1052,617L1052,571C1052,562.169 1059.169,555 1068,555L1229,555C1237.831,555 1245,562.169 1245,571Z" style="fill:rgb(237,247,242);stroke:rgb(78,154,114);stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;"/>
+        <g transform="matrix(1,0,0,1,1148.5,593)">
+            <text x="-60.021px" y="0px" style="font-family:'Helvetica';font-size:18px;fill:rgb(24,48,71);">Spectral library</text>
+        </g>
+        <g transform="matrix(1,0,0,1,1148.5,618)">
+            <text x="-46.424px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(82,103,125);">TSV + SHA-512</text>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,14 @@
+---
+global:
+  temp_dir: work
+  nf_config: test/global.config
+  remove_temp: false
+  clean_logs: true
+
+cases:
+  - name: test-integration-EasyPQP
+    message: Build one spectral library from multiple identified mzML runs
+    nf_script: main.nf
+    nf_config: test/test-integration-EasyPQP/test.config
+    skip: false
+    verbose: true

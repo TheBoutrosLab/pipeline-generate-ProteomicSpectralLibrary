@@ -1,121 +1,189 @@
 #!/usr/bin/env nextflow
 
-nextflow.enable.dsl=2
+nextflow.enable.dsl = 2
 
-// Include processes and workflows here
-include { run_validate_PipeVal } from './external/pipeline-Nextflow-module/modules/PipeVal/validate/main.nf'
+include { convert_EasyPQP } from './module/convert_EasyPQP.nf'
+include { library_EasyPQP } from './module/library_EasyPQP.nf'
+include { split_idXML } from './module/split_idXML.nf'
+include { set_EasyPQP_idXML_score } from './module/set_EasyPQP_idXML_score.nf'
 
-include { generate_standard_filename } from './external/pipeline-Nextflow-module/modules/common/generate_standardized_filename/main.nf'
-include { indexFile } from './external/pipeline-Nextflow-module/modules/common/indexFile/main.nf'
+/** Read one merged idXML per biological sample. */
+def indexIdentifications(List rows, def csv) {
+    if (!rows) {
+        error "Input CSV has no samples: ${csv}"
+    }
 
-// Add this pipeline's custom modules here
-include { run_command_Tool } from './module/EXAMPLE_checksum.nf'
+    def samples = [:]
+    rows.each { row ->
+        if (!row.keySet().containsAll(['sample_name', 'idXML'])) {
+            error "${csv} must include sample_name,idXML columns"
+        }
 
-// include { tool_name_command_name } from './module/module-name'
+        def sampleName = row.sample_name?.trim()
+        if (!(sampleName ==~ /[A-Za-z0-9][A-Za-z0-9._-]*/) ||
+            sampleName in ['.', '..']) {
+            error "Invalid sample_name in ${csv}: ${row.sample_name}"
+        }
+        if (samples.containsKey(sampleName)) {
+            error "Duplicate sample_name in ${csv}: ${sampleName}"
+        }
 
-// Log info here
+        def inputPath = row.idXML?.trim()
+        if (!inputPath) {
+            error "Missing idXML path for ${sampleName} in ${csv}"
+        }
+        def identification = file(inputPath.startsWith('/') ? inputPath : "${csv.parent}/${inputPath}")
+        if (!identification.isFile() || !identification.name.toLowerCase().endsWith('.idxml')) {
+            error "Missing or invalid idXML for ${sampleName}: ${identification}"
+        }
+        samples[sampleName] = identification
+    }
+    return samples
+}
+
+/** Read fraction mzMLs and match each sample to one merged idXML. */
+def readSamples(String mzmlCsv, String idxmlCsv) {
+    def spectraCsv = file(mzmlCsv)
+    def identificationCsv = file(idxmlCsv)
+
+    Channel.fromPath(spectraCsv).splitCsv(header: true).toList()
+        .map { rows -> [rows: rows] }
+        .combine(Channel.fromPath(identificationCsv).splitCsv(header: true).toList()
+            .map { rows -> [rows: rows] })
+        .map { spectraInput, identificationInput ->
+            def identificationsBySample = indexIdentifications(identificationInput.rows, identificationCsv)
+            def spectraBySample = [:].withDefault { [] }
+            def rawNames = [] as Set
+            if (!spectraInput.rows) {
+                error "Input CSV has no fractions: ${spectraCsv}"
+            }
+            spectraInput.rows.each { row ->
+                if (!row.keySet().containsAll(['sample_name', 'fraction_id', 'mzML'])) {
+                    error "${spectraCsv} must include sample_name,fraction_id,mzML columns"
+                }
+                def sampleName = row.sample_name?.trim()
+                def fractionId = row.fraction_id?.trim()
+                if (!(sampleName ==~ /[A-Za-z0-9][A-Za-z0-9._-]*/) ||
+                    sampleName in ['.', '..'] ||
+                    !(fractionId ==~ /[A-Za-z0-9][A-Za-z0-9._-]*/) ||
+                    fractionId in ['.', '..']) {
+                    error "Invalid sample_name or fraction_id in ${spectraCsv}: ${row}"
+                }
+                if (spectraBySample[sampleName].any { it.fractionId == fractionId }) {
+                    error "Duplicate fraction_id '${fractionId}' for sample '${sampleName}'"
+                }
+                def rawPath = row.mzML?.trim()
+                if (!rawPath) {
+                    error "Missing mzML path for ${sampleName}, fraction ${fractionId}"
+                }
+                def spectra = file(rawPath.startsWith('/') ? rawPath : "${spectraCsv.parent}/${rawPath}")
+                if (!spectra.isFile() || !spectra.name.toLowerCase().endsWith('.mzml')) {
+                    error "Missing or invalid mzML for ${sampleName}, fraction ${fractionId}: ${spectra}"
+                }
+                if (spectra.baseName.contains('.') || !rawNames.add(spectra.name.toLowerCase())) {
+                    error "mzML names must be unique and have no dots before .mzML: ${spectra.name}"
+                }
+                spectraBySample[sampleName] << [fractionId: fractionId, mzml: spectra]
+            }
+            def missingIds = (spectraBySample.keySet() - identificationsBySample.keySet()).sort()
+            def missingSpectra = (identificationsBySample.keySet() - spectraBySample.keySet()).sort()
+            if (missingIds || missingSpectra) {
+                error "CSV sample_name mismatch; missing idXML: ${missingIds}; missing mzML: ${missingSpectra}"
+            }
+            if (!params.fractionated && spectraBySample.any { name, fractions -> fractions.size() != 1 }) {
+                error 'fractionated = false requires exactly one mzML row per sample_name'
+            }
+            def idPaths = [] as Set
+            def runNames = [] as Set
+            spectraBySample.keySet().sort().collect { sampleName ->
+                def identification = identificationsBySample[sampleName]
+                if (!idPaths.add(identification.toString())) {
+                    error "Merged idXML is assigned to multiple samples: ${identification}"
+                }
+                spectraBySample[sampleName].each { fraction ->
+                    def runName = "${sampleName}_${fraction.fractionId}"
+                    if (!runNames.add(runName)) {
+                        error "Fractions produce the same output name: ${runName}"
+                    }
+                }
+                tuple(sampleName, identification,
+                    spectraBySample[sampleName].sort { it.fractionId })
+            }
+        }
+}
+
+/** Require exactly one IDRipper output for every mzML basename. */
+def matchFractions(String sampleName, List fractions, def splitFiles) {
+    def candidates = splitFiles instanceof List ? splitFiles : [splitFiles]
+    def used = [] as Set
+    fractions.collect { fraction ->
+        def prefix = fraction.mzml.baseName
+        def matches = candidates.findAll { idxml ->
+            idxml.baseName == prefix || idxml.baseName.startsWith("${prefix}_")
+        }
+        if (matches.size() != 1) {
+            error "Expected one split idXML for ${sampleName}, fraction ${fraction.fractionId}, " +
+                "mzML ${fraction.mzml.name}; found ${matches.size()}: ${matches*.name}"
+        }
+        if (!used.add(matches[0].toString())) {
+            error "Split idXML matched multiple fractions: ${matches[0]}"
+        }
+        tuple("${sampleName}_${fraction.fractionId}", matches[0], fraction.mzml)
+    }
+}
+
 log.info """\
-        ======================================
-        T E M P L A T E - N F  P I P E L I N E
-        ======================================
+        =====================================================================
+        G E N E R A T E   P R O T E O M I C   S P E C T R A L   L I B R A R Y
+        =====================================================================
         Boutros Lab
 
-        Current Configuration:
-        - pipeline:
-            name: ${workflow.manifest.name}
-            version: ${workflow.manifest.version}
+        Pipeline: ${workflow.manifest.name} ${workflow.manifest.version}
+        mzML CSV: ${params.mzml_csv}
+        idXML CSV: ${params.idxml_csv}
+        Fractionated: ${params.fractionated}
+        idXML score: ${params.idxml_score_type} (${params.easypqp_score_type})
+        Cohort reports: ${params.psm_tsv}, ${params.peptide_tsv}
+        Output: ${params.output_dir_base}
+        OpenMS image: ${params.docker_image_openms}
+        EasyPQP image: ${params.docker_image_easypqp}
+        """.stripIndent()
 
-        - input:
-            input a: ${params.variable_name}
-            ...
-
-        - output:
-            output a: ${params.output_path}
-            ...
-
-        - options:
-            option a: ${params.option_name}
-            ...
-
-        Tools Used:
-            tool a: ${params.docker_image_name}
-
-        ------------------------------------
-        Starting workflow...
-        ------------------------------------
-        """
-        .stripIndent()
-
-// Establish input channels here
-Channel
-    .fromList(params.samples_to_process)
-    .map { sample ->
-        return tuple(sample.id, sample.path, sample.sample_type)
-    }
-    .set { samplesToProcessChannel }
-
-Channel
-    .fromList(params.samples_to_process)
-    .map{ it -> [it['path'], indexFile(it['path'])] }
-    .flatten()
-    .set { files_to_validate_ch }
-
-// These are a few potential channels that can be mixed in
-
-/*
-Channel
-    .from(
-        params.reference,
-        params.reference_index,
-        params.reference_dict
-        )
-    .set { reference_ch }
-
-// Decription of input channel
-Channel
-    .fromPath(params.variable_name)
-    .ifEmpty { error "Cannot find: ${params.variable_name}" }
-    .set { input_ch_variable_name }
-
-files_to_validate_ch = files_to_validate_ch
-    .mix(reference_ch)
-    .mix(input_ch_variable_name)
-*/
-
-// Main workflow here
 workflow {
+    samples = readSamples(params.mzml_csv, params.idxml_csv)
+    sampleRecords = samples.flatMap { it }
 
+    if (params.fractionated) {
+        singleFractions = sampleRecords
+            .filter { sampleName, idxml, fractions -> fractions.size() == 1 }
+            .map { sampleName, idxml, fractions ->
+                tuple("${sampleName}_${fractions[0].fractionId}", idxml, fractions[0].mzml)
+            }
+        split_idXML(sampleRecords.filter { sampleName, idxml, fractions -> fractions.size() > 1 })
+        splitFractions = split_idXML.out.split.flatMap { sampleName, fractions, splitFiles ->
+            matchFractions(sampleName, fractions, splitFiles)
+        }
+        pairedFractions = singleFractions.mix(splitFractions)
+    } else {
+        pairedFractions = sampleRecords.map { sampleName, idxml, fractions ->
+            tuple("${sampleName}_${fractions[0].fractionId}", idxml, fractions[0].mzml)
+        }
+    }
+    set_EasyPQP_idXML_score(pairedFractions)
+    convert_EasyPQP(set_EasyPQP_idXML_score.out.prepared)
 
-    base_meta = Channel.value([
-        'log_output_dir': params.log_output_dir,
-        'output_dir': params.output_dir_base
-    ])
+    converted = convert_EasyPQP.out.converted
+        .collect(flat: false)
+        .map { rows ->
+            def ordered = rows.sort { left, right -> left[0] <=> right[0] }
+            tuple(params.dataset_id,
+                  ordered.collect { it[1] },
+                  ordered.collect { it[2] })
+        }
 
-    // Validate input files
-    run_validate_PipeVal(
-        base_meta.combine(files_to_validate_ch)
-        )
-
-    // Capture validation results
-    run_validate_PipeVal.out.validation_result
-        .collectFile(
-            name: 'input_validation.txt', newLine: true,
-            storeDir: "${params.output_dir_base}/validation"
-        )
-
-    // Add pipeline-specific workflow steps here
-    run_command_Tool(
-        run_validate_PipeVal.out.validated_file
-        )
-
-    /*
-    tool_name_command_name(
-        samplesToProcessChannel,
-        input_ch_variable_name
-        )
-    */
+    library_EasyPQP(converted, file(params.psm_tsv), file(params.peptide_tsv))
 
     workflow.onComplete = {
-        WorkflowFinalizer.completeWorkflow(workflow, params);
+        WorkflowFinalizer.completeWorkflow(workflow, params)
     }
 }
