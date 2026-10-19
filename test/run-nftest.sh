@@ -8,7 +8,8 @@ if [[ $# -ne 1 ]]; then
 fi
 
 readonly TEST_CASE="$1"
-readonly REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+readonly REPO_DIR
 readonly ENV_FILE="${REPO_DIR}/.env"
 
 : "${SLURM_JOB_ID:?SLURM_JOB_ID is not defined; run this script inside a Slurm job}"

@@ -46,7 +46,8 @@ def main():
                      if identification.metaValueExists("spectrum_reference") else "unknown")
         if higher_score_better and original_type in ("PEP", "q-value"):
             raise ValueError(
-                f"Input {original_type} for spectrum {reference} cannot have higher_score_better=true"
+                f"Input {original_type} for spectrum {reference} cannot have "
+                "higher_score_better=true"
             )
         if higher_score_better:
             raise ValueError(
