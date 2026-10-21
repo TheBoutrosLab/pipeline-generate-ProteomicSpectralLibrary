@@ -182,8 +182,4 @@ workflow {
         }
 
     library_EasyPQP(converted, file(params.psm_tsv), file(params.peptide_tsv))
-
-    workflow.onComplete = {
-        WorkflowFinalizer.completeWorkflow(workflow, params)
-    }
 }
