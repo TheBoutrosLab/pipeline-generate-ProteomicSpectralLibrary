@@ -2,7 +2,10 @@
 
 All notable changes to the generate-ProteomicSpectralLibrary pipeline are recorded here.
 
-## [Unreleased]
+## [Unreleased] - 2026-10-21
+
+### Fixed
+- Keep individual process logs in `process-log/` after successful runs instead of archiving and deleting the directory.
 
 ## [1.0.0] - 2026-10-19
 

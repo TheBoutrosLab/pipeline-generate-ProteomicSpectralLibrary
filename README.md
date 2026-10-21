@@ -75,7 +75,8 @@ Results are written under `<output_dir>/generate-ProteomicSpectralLibrary-<versi
 | `intermediate/IDRipper/<sample_name>/split/*.idXML` | Fraction-specific idXMLs when `save_intermediate_files = true`. |
 | `intermediate/EasyPQP/<sample_name>_<fraction_id>/<input_basename>_EasyPQP.idXML` | EasyPQP-compatible idXML when `save_intermediate_files = true`. |
 | `intermediate/EasyPQP/<sample_name>_<fraction_id>/*.pkl` | Per-fraction PSM and peak pickles when `save_intermediate_files = true`. |
-| `log-*/` | Nextflow trace, report, timeline, parameters, and process logs. |
+| `log-*/process-log/` | Individual process logs, retained as ordinary files after a successful run. |
+| `log-*/nextflow-log/` | Nextflow trace, report, timeline, and parameters. |
 
 ## Testing
 
