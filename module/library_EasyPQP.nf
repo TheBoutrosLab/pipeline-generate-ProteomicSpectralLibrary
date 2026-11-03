@@ -17,7 +17,9 @@ process library_EasyPQP {
         path('easypqp_*_report.pdf'), optional: true, emit: reports
 
     script:
-        def convertedFiles = (psm_pickles + peak_pickles).collect { "\"${it}\"" }.join(' ')
+        def convertedFiles = [psm_pickles, peak_pickles]
+            .collectMany { it instanceof List ? it : [it] }
+            .collect { "\"${it}\"" }.join(' ')
         """
         set -euo pipefail
         easypqp library \\
