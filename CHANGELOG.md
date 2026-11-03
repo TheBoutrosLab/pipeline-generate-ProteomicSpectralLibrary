@@ -4,6 +4,10 @@ All notable changes to the generate-ProteomicSpectralLibrary pipeline are record
 
 ## [Unreleased]
 
+### Fixed
+
+- Pass PSM and peak pickle files separately to EasyPQP when the cohort has only one converted run.
+
 ## [1.0.1] - 2026-10-24
 
 ### Fixed
