@@ -4,6 +4,8 @@ All notable changes to the generate-ProteomicSpectralLibrary pipeline are record
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-10
+
 ### Added
 
 - Build EasyPQP libraries separately for each offline fraction, then publish one TSV with fraction-specific fragment rows.
@@ -36,4 +38,5 @@ All notable changes to the generate-ProteomicSpectralLibrary pipeline are record
 [1.0.0]: https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/releases/tag/v1.0.0
 [1.0.1]: https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/compare/v1.0.0...v1.0.1
 [1.0.2]: https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/compare/v1.0.1...v1.0.2
-[unreleased]: https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/compare/v1.0.2...HEAD
+[1.1.0]: https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/compare/v1.0.2...v1.1.0
+[unreleased]: https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/compare/v1.1.0...HEAD
