@@ -86,7 +86,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Pipeline steps</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/blob/2fdd66dce056aff9e89c34f1de2e0002a4894d07/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/blob/427001de8eef08d0a738179afc2da25711c49149/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -99,7 +99,8 @@
 <li>When <code>fractionated = true</code>, <code>split_idXML</code> runs IDRipper once per multi-fraction sample, then matches each split idXML to a fraction's mzML basename. Single-fraction samples bypass this step.</li>
 <li><code>set_EasyPQP_idXML_score</code> uses <code>SetIdXMLPrimaryScore.py</code> to write a separate idXML with the selected primary score for each fraction. The source script is mounted read-only from the pipeline's <code>src</code> directory.</li>
 <li><code>convert_EasyPQP</code> runs once per matched fraction with <code>easypqp convert --pepxml --spectra --psms --peaks</code>. The pickle filenames use the mzML basename, which EasyPQP uses to pair peaks with PSMs during library generation.</li>
-<li><code>library_EasyPQP</code> waits for all conversions, then runs once with every <code>.psmpkl</code> and <code>.peakpkl</code> plus <code>--psmtsv</code> and <code>--peptidetsv</code>. With both reports present, EasyPQP uses their PSM selection and protein labels instead of recalculating its own peptide and protein FDR.</li>
+<li>With <code>fractionated = true</code>, <code>library_EasyPQP</code> runs once per <code>fraction_id</code> with that fraction's <code>.psmpkl</code> and <code>.peakpkl</code> files across samples. Otherwise it runs once with all samples. Each call receives the cohort <code>--psmtsv</code> and <code>--peptidetsv</code> reports, whose PSM selection and protein labels EasyPQP uses instead of recalculating its own peptide and protein FDR.</li>
+<li>With <code>fractionated = true</code>, <code>combine_FractionSpectralLibrary</code> appends <code>fraction_id</code> to every fragment row and concatenates the fraction libraries with one header. Otherwise it copies the EasyPQP TSV unchanged.</li>
 </ol>
 <p>The workflow is shown in the <a href="../pipeline-flow.svg">SVG schematic</a>.</p>
               

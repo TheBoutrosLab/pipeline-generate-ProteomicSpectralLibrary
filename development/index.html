@@ -86,7 +86,7 @@
     <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Home</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/blob/2fdd66dce056aff9e89c34f1de2e0002a4894d07/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/blob/427001de8eef08d0a738179afc2da25711c49149/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -95,7 +95,7 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="generate-proteomic-spectral-library">Generate Proteomic Spectral Library</h1>
-<p>This Nextflow pipeline builds one cohort spectral library with <a href="https://github.com/grosenberger/easypqp">EasyPQP</a> 0.1.59. For fractionated samples, it splits each merged idXML by source run with OpenMS IDRipper and matches the split files to the mzML fractions. Single-fraction samples use their idXML directly. EasyPQP converts each matched run to PSM and peak pickles, then combines them using the cohort-wide <code>psm.tsv</code> and <code>peptide.tsv</code> reports.</p>
+<p>This Nextflow pipeline builds one cohort spectral library with <a href="https://github.com/grosenberger/easypqp">EasyPQP</a> 0.1.59. For fractionated samples, it splits each merged idXML by source run with OpenMS IDRipper and matches the split files to the mzML fractions. Single-fraction samples use their idXML directly. EasyPQP converts each matched run to PSM and peak pickles, then builds a library for each <code>fraction_id</code> across biological samples using the cohort-wide <code>psm.tsv</code> and <code>peptide.tsv</code> reports. With <code>fractionated = true</code>, the pipeline labels every fragment row with its <code>fraction_id</code> and combines the fraction libraries into one TSV.</p>
               
             </div>
           </div><footer>
@@ -148,5 +148,5 @@
 
 <!--
 MkDocs version : 1.5.3
-Build Date UTC : 2026-11-03 19:46:06.436948+00:00
+Build Date UTC : 2026-11-10 22:58:08.590981+00:00
 -->

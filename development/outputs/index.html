@@ -86,7 +86,7 @@
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
       <li class="breadcrumb-item active">Outputs</li>
     <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/blob/2fdd66dce056aff9e89c34f1de2e0002a4894d07/README.md" class="icon icon-github"> Edit on GitHub</a>
+          <a href="https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/blob/427001de8eef08d0a738179afc2da25711c49149/README.md" class="icon icon-github"> Edit on GitHub</a>
     </li>
   </ul>
   <hr/>
@@ -106,19 +106,27 @@
 <tbody>
 <tr>
 <td><code>output/EasyPQP/&lt;dataset_id&gt;_library.tsv</code></td>
-<td>Cohort spectral library.</td>
+<td>Cohort spectral library; includes <code>fraction_id</code> when <code>fractionated = true</code>.</td>
 </tr>
 <tr>
 <td><code>output/EasyPQP/&lt;dataset_id&gt;_library.tsv.sha512</code></td>
 <td>SHA-512 checksum for the library.</td>
 </tr>
 <tr>
-<td><code>output/EasyPQP/easypqp_*_reference_run.tsv</code></td>
-<td>RT or ion-mobility reference run, when generated.</td>
+<td><code>intermediate/EasyPQP/libraries/&lt;fraction_id&gt;/&lt;dataset_id&gt;_&lt;fraction_id&gt;_library.tsv</code></td>
+<td>EasyPQP library for one fraction, available as an intermediate.</td>
 </tr>
 <tr>
-<td><code>output/EasyPQP/easypqp_*_report.pdf</code></td>
-<td>EasyPQP calibration report, when generated.</td>
+<td><code>intermediate/EasyPQP/libraries/&lt;fraction_id&gt;/easypqp_*_reference_run.tsv</code></td>
+<td>Fraction-specific RT or ion-mobility reference run, when generated.</td>
+</tr>
+<tr>
+<td><code>intermediate/EasyPQP/libraries/&lt;fraction_id&gt;/easypqp_*_report.pdf</code></td>
+<td>Fraction-specific EasyPQP calibration report, when generated.</td>
+</tr>
+<tr>
+<td><code>output/EasyPQP/easypqp_*</code></td>
+<td>EasyPQP reference files and reports from an unfractionated run, when generated.</td>
 </tr>
 <tr>
 <td><code>intermediate/IDRipper/&lt;sample_name&gt;/split/*.idXML</code></td>
