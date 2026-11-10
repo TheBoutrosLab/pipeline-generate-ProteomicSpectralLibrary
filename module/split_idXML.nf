@@ -19,12 +19,4 @@ process split_idXML {
         mkdir -p split
         IDRipper -in "${merged_idxml}" -out split -threads ${task.cpus}
         """
-
-    stub:
-        def names = fractions.collect { it.mzml.baseName }.unique()
-        def outputs = names.collect { "printf '<IdXML/>\\n' > 'split/${it}.idXML'" }.join('\n')
-        """
-        mkdir -p split
-        ${outputs}
-        """
 }

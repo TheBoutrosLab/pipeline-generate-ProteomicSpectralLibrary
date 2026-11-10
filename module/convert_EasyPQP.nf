@@ -8,10 +8,10 @@ process convert_EasyPQP {
         pattern: '*pkl'
 
     input:
-        tuple val(sample_name), path(id_file), path(mzml)
+        tuple val(sample_name), val(fraction_id), path(id_file), path(mzml)
 
     output:
-        tuple val(sample_name),
+        tuple val(sample_name), val(fraction_id),
             path("${mzml.baseName.replaceFirst(/_(?:un)?calibrated$/, '')}.psmpkl"),
             path("${mzml.baseName.replaceFirst(/_(?:un)?calibrated$/, '')}.peakpkl"),
             emit: converted
@@ -25,12 +25,5 @@ process convert_EasyPQP {
             --spectra "${mzml}" \\
             --psms "${spectra_name}.psmpkl" \\
             --peaks "${spectra_name}.peakpkl"
-        """
-
-    stub:
-        def spectra_name = mzml.baseName.replaceFirst(/_(?:un)?calibrated$/, '')
-        """
-        printf 'stub PSMs\\n' > "${spectra_name}.psmpkl"
-        printf 'stub peaks\\n' > "${spectra_name}.peakpkl"
         """
 }

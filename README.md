@@ -1,6 +1,6 @@
 # Generate Proteomic Spectral Library
 
-This Nextflow pipeline builds one cohort spectral library with [EasyPQP](https://github.com/grosenberger/easypqp) 0.1.59. For fractionated samples, it splits each merged idXML by source run with OpenMS IDRipper and matches the split files to the mzML fractions. Single-fraction samples use their idXML directly. EasyPQP converts each matched run to PSM and peak pickles, then combines them using the cohort-wide `psm.tsv` and `peptide.tsv` reports.
+This Nextflow pipeline builds one cohort spectral library with [EasyPQP](https://github.com/grosenberger/easypqp) 0.1.59. For fractionated samples, it splits each merged idXML by source run with OpenMS IDRipper and matches the split files to the mzML fractions. Single-fraction samples use their idXML directly. EasyPQP converts each matched run to PSM and peak pickles, then builds a library for each `fraction_id` across biological samples using the cohort-wide `psm.tsv` and `peptide.tsv` reports. With `fractionated = true`, the pipeline labels every fragment row with its `fraction_id` and combines the fraction libraries into one TSV.
 
 ## How to run
 
@@ -33,6 +33,8 @@ sample-a,/data/sample-a_ProtLoom.idXML
 
 `sample_name` identifies a biological sample and may appear on several mzML rows. Each `(sample_name, fraction_id)` pair must be unique. The idXML CSV must have exactly one row for every sample in the mzML CSV. Row order does not matter. With `fractionated = false` (the default), every sample must have exactly one mzML row and its idXML goes directly to EasyPQP. With `fractionated = true`, IDRipper splits only samples with multiple mzML rows; samples with one row still use their idXML directly. Each split idXML must match exactly one mzML basename, using the same basename or that basename followed by an underscore and suffix. The workflow stops if a fraction has no match or multiple matches. Relative file paths are resolved from their respective CSV directories. mzML basenames must be unique across the experiment and cannot contain additional dots because EasyPQP parses spectrum names on dots. Use the unfiltered ProtLoom idXML from the validation pipeline; the cohort TSV reports contain the accepted PSMs and peptides at the desired FDR cutoff.
 
+For offline fractionation, use the same `fraction_id` for the corresponding fraction across biological samples and set `fractionated = true`. EasyPQP pools only runs with the same `fraction_id` when building each intermediate library. The published TSV retains separate fragment rows when a precursor is observed in multiple fractions. With `fractionated = false`, all samples are pooled into one library and the published TSV is an unchanged copy of EasyPQP's output, with no extra column.
+
 The `psm_tsv` and `peptide_tsv` parameters point to the cohort-level EasyPQP reports exported by `pipeline-validate-ProteomicPSM`. The required TSV columns are `Spectrum`, `Spectrum File`, `Peptide` for the PSM report and `Peptide`, `Gene`, `Protein ID` for the peptide report. Spectrum file names must match the mzML basenames in the mzML CSV.
 
 Set `idxml_score_type` to the exact primary score type or PeptideHit metadata key containing the desired score. Set `easypqp_score_type` to its meaning, exactly `PEP` or `q-value`. The pipeline first uses the primary score when its type matches; otherwise it reads the named hit metadata. It requires a finite score from 0 to 1 for every hit and writes a temporary EasyPQP-compatible idXML without changing the source. The defaults select the `ProtLoom PEP` primary score and label it `PEP`. If the input keeps a different primary score, set `idxml_score_type = 'protloom_pep'` to read ProtLoom's hit metadata instead. The input's `higher_score_better` value is preserved; because PEP and q-value are lower-is-better, an input marked higher-is-better is rejected rather than silently changed. Do not label a q-value as PEP: EasyPQP accepts `q-value`, but its idXML parser sets the separate PEP field to zero in that case.
@@ -58,7 +60,8 @@ Set `idxml_score_type` to the exact primary score type or PeptideHit metadata ke
 1. When `fractionated = true`, `split_idXML` runs IDRipper once per multi-fraction sample, then matches each split idXML to a fraction's mzML basename. Single-fraction samples bypass this step.
 2. `set_EasyPQP_idXML_score` uses `SetIdXMLPrimaryScore.py` to write a separate idXML with the selected primary score for each fraction. The source script is mounted read-only from the pipeline's `src` directory.
 3. `convert_EasyPQP` runs once per matched fraction with `easypqp convert --pepxml --spectra --psms --peaks`. The pickle filenames use the mzML basename, which EasyPQP uses to pair peaks with PSMs during library generation.
-4. `library_EasyPQP` waits for all conversions, then runs once with every `.psmpkl` and `.peakpkl` plus `--psmtsv` and `--peptidetsv`. With both reports present, EasyPQP uses their PSM selection and protein labels instead of recalculating its own peptide and protein FDR.
+4. With `fractionated = true`, `library_EasyPQP` runs once per `fraction_id` with that fraction's `.psmpkl` and `.peakpkl` files across samples. Otherwise it runs once with all samples. Each call receives the cohort `--psmtsv` and `--peptidetsv` reports, whose PSM selection and protein labels EasyPQP uses instead of recalculating its own peptide and protein FDR.
+5. With `fractionated = true`, `combine_FractionSpectralLibrary` appends `fraction_id` to every fragment row and concatenates the fraction libraries with one header. Otherwise it copies the EasyPQP TSV unchanged.
 
 The workflow is shown in the [SVG schematic](docs/pipeline-flow.svg).
 
@@ -68,10 +71,12 @@ Results are written under `<output_dir>/generate-ProteomicSpectralLibrary-<versi
 
 | Output | Description |
 | --- | --- |
-| `output/EasyPQP/<dataset_id>_library.tsv` | Cohort spectral library. |
+| `output/EasyPQP/<dataset_id>_library.tsv` | Cohort spectral library; includes `fraction_id` when `fractionated = true`. |
 | `output/EasyPQP/<dataset_id>_library.tsv.sha512` | SHA-512 checksum for the library. |
-| `output/EasyPQP/easypqp_*_reference_run.tsv` | RT or ion-mobility reference run, when generated. |
-| `output/EasyPQP/easypqp_*_report.pdf` | EasyPQP calibration report, when generated. |
+| `intermediate/EasyPQP/libraries/<fraction_id>/<dataset_id>_<fraction_id>_library.tsv` | EasyPQP library for one fraction, available as an intermediate. |
+| `intermediate/EasyPQP/libraries/<fraction_id>/easypqp_*_reference_run.tsv` | Fraction-specific RT or ion-mobility reference run, when generated. |
+| `intermediate/EasyPQP/libraries/<fraction_id>/easypqp_*_report.pdf` | Fraction-specific EasyPQP calibration report, when generated. |
+| `output/EasyPQP/easypqp_*` | EasyPQP reference files and reports from an unfractionated run, when generated. |
 | `intermediate/IDRipper/<sample_name>/split/*.idXML` | Fraction-specific idXMLs when `save_intermediate_files = true`. |
 | `intermediate/EasyPQP/<sample_name>_<fraction_id>/<input_basename>_EasyPQP.idXML` | EasyPQP-compatible idXML when `save_intermediate_files = true`. |
 | `intermediate/EasyPQP/<sample_name>_<fraction_id>/*.pkl` | Per-fraction PSM and peak pickles when `save_intermediate_files = true`. |
@@ -80,7 +85,7 @@ Results are written under `<output_dir>/generate-ProteomicSpectralLibrary-<versi
 
 ## Testing
 
-The [nf-test integration case](test/README.md) is configured for Slurm. Copy `.env-template` to `.env`, set `TEST_DATA_DIR`, and fill the four input paths in `test/test-integration-EasyPQP/test.config` before running it.
+The [nf-test integration case](test/README.md) is configured for Slurm and exercises the unfractionated route. Copy `.env-template` to `.env` and set `TEST_DATA_DIR` before running it.
 
 ## References and discussions
 
