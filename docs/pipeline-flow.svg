@@ -150,14 +150,14 @@
             <text x="-65.861px" y="0px" style="font-family:'Helvetica';font-size:18px;fill:rgb(24,48,71);">EasyPQP<tspan x="11.852px 16.853px " y="0px 0px "> l</tspan>ibrary</text>
         </g>
         <g transform="matrix(1,0,0,1,877.5,568)">
-            <text x="-50.219px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(82,103,125);">one cohort library</text>
+            <text x="-67px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(82,103,125);">one library per fraction</text>
         </g>
         <path d="M1245,571L1245,617C1245,625.831 1237.831,633 1229,633L1068,633C1059.169,633 1052,625.831 1052,617L1052,571C1052,562.169 1059.169,555 1068,555L1229,555C1237.831,555 1245,562.169 1245,571Z" style="fill:rgb(237,247,242);stroke:rgb(78,154,114);stroke-width:2px;stroke-linecap:butt;stroke-linejoin:miter;"/>
         <g transform="matrix(1,0,0,1,1148.5,593)">
-            <text x="-60.021px" y="0px" style="font-family:'Helvetica';font-size:18px;fill:rgb(24,48,71);">Spectral library</text>
+            <text x="-74px" y="0px" style="font-family:'Helvetica';font-size:18px;fill:rgb(24,48,71);">Combined library</text>
         </g>
         <g transform="matrix(1,0,0,1,1148.5,618)">
-            <text x="-46.424px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(82,103,125);">TSV + SHA-512</text>
+            <text x="-65px" y="0px" style="font-family:'Helvetica';font-size:13px;fill:rgb(82,103,125);">fraction_id · TSV + SHA-512</text>
         </g>
     </g>
 </svg>

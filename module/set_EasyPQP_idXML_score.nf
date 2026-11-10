@@ -9,10 +9,11 @@ process set_EasyPQP_idXML_score {
         pattern: '*_EasyPQP.idXML'
 
     input:
-        tuple val(sample_name), path(id_file), path(mzml)
+        tuple val(sample_name), val(fraction_id), path(id_file), path(mzml)
 
     output:
-        tuple val(sample_name), path("${id_file.baseName}_EasyPQP.idXML"), path(mzml), emit: prepared
+        tuple val(sample_name), val(fraction_id),
+            path("${id_file.baseName}_EasyPQP.idXML"), path(mzml), emit: prepared
 
     script:
         def output_name = "${id_file.baseName}_EasyPQP.idXML"
@@ -23,11 +24,5 @@ process set_EasyPQP_idXML_score {
             --output "${output_name}" \\
             --source-score '${params.idxml_score_type}' \\
             --target-score '${params.easypqp_score_type}'
-        """
-
-    stub:
-        def output_name = "${id_file.baseName}_EasyPQP.idXML"
-        """
-        cp "${id_file}" "${output_name}"
         """
 }

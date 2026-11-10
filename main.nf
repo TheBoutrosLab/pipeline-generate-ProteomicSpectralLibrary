@@ -6,6 +6,7 @@ include { convert_EasyPQP } from './module/convert_EasyPQP.nf'
 include { library_EasyPQP } from './module/library_EasyPQP.nf'
 include { split_idXML } from './module/split_idXML.nf'
 include { set_EasyPQP_idXML_score } from './module/set_EasyPQP_idXML_score.nf'
+include { combine_FractionSpectralLibrary } from './module/combine_FractionSpectralLibrary.nf'
 
 /** Read one merged idXML per biological sample. */
 def indexIdentifications(List rows, def csv) {
@@ -128,7 +129,8 @@ def matchFractions(String sampleName, List fractions, def splitFiles) {
         if (!used.add(matches[0].toString())) {
             error "Split idXML matched multiple fractions: ${matches[0]}"
         }
-        tuple("${sampleName}_${fraction.fractionId}", matches[0], fraction.mzml)
+        tuple("${sampleName}_${fraction.fractionId}", fraction.fractionId,
+            matches[0], fraction.mzml)
     }
 }
 
@@ -157,7 +159,8 @@ workflow {
         singleFractions = sampleRecords
             .filter { sampleName, idxml, fractions -> fractions.size() == 1 }
             .map { sampleName, idxml, fractions ->
-                tuple("${sampleName}_${fractions[0].fractionId}", idxml, fractions[0].mzml)
+                tuple("${sampleName}_${fractions[0].fractionId}", fractions[0].fractionId,
+                    idxml, fractions[0].mzml)
             }
         split_idXML(sampleRecords.filter { sampleName, idxml, fractions -> fractions.size() > 1 })
         splitFractions = split_idXML.out.split.flatMap { sampleName, fractions, splitFiles ->
@@ -166,20 +169,40 @@ workflow {
         pairedFractions = singleFractions.mix(splitFractions)
     } else {
         pairedFractions = sampleRecords.map { sampleName, idxml, fractions ->
-            tuple("${sampleName}_${fractions[0].fractionId}", idxml, fractions[0].mzml)
+            tuple("${sampleName}_${fractions[0].fractionId}", fractions[0].fractionId,
+                idxml, fractions[0].mzml)
         }
     }
     set_EasyPQP_idXML_score(pairedFractions)
     convert_EasyPQP(set_EasyPQP_idXML_score.out.prepared)
 
-    converted = convert_EasyPQP.out.converted
+    converted = convert_EasyPQP.out.converted.collect(flat: false)
+    if (params.fractionated) {
+        convertedByFraction = converted.flatMap { rows ->
+            def byFraction = rows.groupBy { it[1] }
+            byFraction.keySet().sort().collect { fractionId ->
+                def ordered = byFraction[fractionId].sort { left, right -> left[0] <=> right[0] }
+                tuple(params.dataset_id, fractionId,
+                    ordered.collect { it[2] }, ordered.collect { it[3] })
+            }
+        }
+    } else {
+        // Unfractionated samples retain the original single cohort library.
+        convertedByFraction = converted.map { rows ->
+            def ordered = rows.sort { left, right -> left[0] <=> right[0] }
+            tuple(params.dataset_id, 'all',
+                ordered.collect { it[2] }, ordered.collect { it[3] })
+        }
+    }
+
+    library_EasyPQP(convertedByFraction, file(params.psm_tsv), file(params.peptide_tsv))
+
+    fractionLibraries = library_EasyPQP.out.library
         .collect(flat: false)
         .map { rows ->
             def ordered = rows.sort { left, right -> left[0] <=> right[0] }
             tuple(params.dataset_id,
-                  ordered.collect { it[1] },
-                  ordered.collect { it[2] })
+                ordered.collect { it[0] }, ordered.collect { it[1] })
         }
-
-    library_EasyPQP(converted, file(params.psm_tsv), file(params.peptide_tsv))
+    combine_FractionSpectralLibrary(fractionLibraries)
 }

@@ -27,6 +27,13 @@
       "retry_strategy": {
         "memory": {"strategy": "exponential", "operand": 2}
       }
+    },
+    "combine_FractionSpectralLibrary": {
+      "cpus": {"min": 1, "fraction": 1.0, "max": 1},
+      "memory": {"min": "4 GB", "fraction": 1.0, "max": "4 GB"},
+      "retry_strategy": {
+        "memory": {"strategy": "exponential", "operand": 2}
+      }
     }
   }
 }

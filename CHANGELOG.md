@@ -4,6 +4,14 @@ All notable changes to the generate-ProteomicSpectralLibrary pipeline are record
 
 ## [Unreleased]
 
+### Added
+
+- Build EasyPQP libraries separately for each offline fraction, then publish one TSV with fraction-specific fragment rows.
+
+### Removed
+
+- Remove synthetic Nextflow stub commands from pipeline processes.
+
 ## [1.0.2] - 2026-11-03
 
 ### Fixed
