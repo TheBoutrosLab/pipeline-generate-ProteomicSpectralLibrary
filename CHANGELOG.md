@@ -4,6 +4,8 @@ All notable changes to the generate-ProteomicSpectralLibrary pipeline are record
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-11-20
+
 ### Changed
 
 - Migrate the pipeline license from GPL to BSD 3-Clause and update license documentation; shared code and third-party tools retain their respective licenses.
@@ -43,4 +45,5 @@ All notable changes to the generate-ProteomicSpectralLibrary pipeline are record
 [1.0.1]: https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/compare/v1.0.0...v1.0.1
 [1.0.2]: https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/compare/v1.0.1...v1.0.2
 [1.1.0]: https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/compare/v1.0.2...v1.1.0
-[unreleased]: https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/compare/v1.1.0...HEAD
+[1.1.1]: https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/compare/v1.1.0...v1.1.1
+[unreleased]: https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/compare/v1.1.1...HEAD
