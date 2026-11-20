@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Inputs - pipeline-generate-ProteomicSpectralLibrary</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../css/version-select.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Inputs";
+        var mkdocs_page_input_path = "inputs.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> pipeline-generate-ProteomicSpectralLibrary
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../how-to-run/">How to run</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Inputs</a>
+    <ul class="current">
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../pipeline-steps/">Pipeline steps</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../outputs/">Outputs</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../testing/">Testing</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../references-and-discussions/">References and discussions</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../license/">License</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">pipeline-generate-ProteomicSpectralLibrary</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Inputs</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/blob/v1.1.1/README.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h2 id="inputs">Inputs</h2>
+<p>The mzML CSV requires these columns and may include others:</p>
+<pre><code class="language-csv">sample_name,fraction_id,mzML
+sample-a,1,/data/sample-a-fraction-1.mzML
+sample-a,2,/data/sample-a-fraction-2.mzML
+</code></pre>
+<p>The idXML CSV requires these columns and may include others:</p>
+<pre><code class="language-csv">sample_name,idXML
+sample-a,/data/sample-a_ProtLoom.idXML
+</code></pre>
+<p><code>sample_name</code> identifies a biological sample and may appear on several mzML rows. Each <code>(sample_name, fraction_id)</code> pair must be unique. The idXML CSV must have exactly one row for every sample in the mzML CSV. Row order does not matter. With <code>fractionated = false</code> (the default), every sample must have exactly one mzML row and its idXML goes directly to EasyPQP. With <code>fractionated = true</code>, IDRipper splits only samples with multiple mzML rows; samples with one row still use their idXML directly. Each split idXML must match exactly one mzML basename, using the same basename or that basename followed by an underscore and suffix. The workflow stops if a fraction has no match or multiple matches. Relative file paths are resolved from their respective CSV directories. mzML basenames must be unique across the experiment and cannot contain additional dots because EasyPQP parses spectrum names on dots. Use the unfiltered ProtLoom idXML from the validation pipeline; the cohort TSV reports contain the accepted PSMs and peptides at the desired FDR cutoff.</p>
+<p>For offline fractionation, use the same <code>fraction_id</code> for the corresponding fraction across biological samples and set <code>fractionated = true</code>. EasyPQP pools only runs with the same <code>fraction_id</code> when building each intermediate library. The published TSV retains separate fragment rows when a precursor is observed in multiple fractions. With <code>fractionated = false</code>, all samples are pooled into one library and the published TSV is an unchanged copy of EasyPQP's output, with no extra column.</p>
+<p>The <code>psm_tsv</code> and <code>peptide_tsv</code> parameters point to the cohort-level EasyPQP reports exported by <code>pipeline-validate-ProteomicPSM</code>. The required TSV columns are <code>Spectrum</code>, <code>Spectrum File</code>, <code>Peptide</code> for the PSM report and <code>Peptide</code>, <code>Gene</code>, <code>Protein ID</code> for the peptide report. Spectrum file names must match the mzML basenames in the mzML CSV.</p>
+<p>Set <code>idxml_score_type</code> to the exact primary score type or PeptideHit metadata key containing the desired score. Set <code>easypqp_score_type</code> to its meaning, exactly <code>PEP</code> or <code>q-value</code>. The pipeline first uses the primary score when its type matches; otherwise it reads the named hit metadata. It requires a finite score from 0 to 1 for every hit and writes a temporary EasyPQP-compatible idXML without changing the source. The defaults select the <code>ProtLoom PEP</code> primary score and label it <code>PEP</code>. If the input keeps a different primary score, set <code>idxml_score_type = 'protloom_pep'</code> to read ProtLoom's hit metadata instead. The input's <code>higher_score_better</code> value is preserved; because PEP and q-value are lower-is-better, an input marked higher-is-better is rejected rather than silently changed. Do not label a q-value as PEP: EasyPQP accepts <code>q-value</code>, but its idXML parser sets the separate PEP field to zero in that case.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dataset_id</code></td>
+<td>Yes</td>
+<td>Safe cohort name for the output directory and library filename.</td>
+</tr>
+<tr>
+<td><code>mzml_csv</code></td>
+<td>Yes</td>
+<td>CSV of <code>sample_name</code>, <code>fraction_id</code>, and mzML path for each run.</td>
+</tr>
+<tr>
+<td><code>idxml_csv</code></td>
+<td>Yes</td>
+<td>CSV of <code>sample_name</code> and merged idXML path for each sample.</td>
+</tr>
+<tr>
+<td><code>fractionated</code></td>
+<td>No</td>
+<td>Enable multiple mzML fractions per sample and IDRipper splitting; default <code>false</code>.</td>
+</tr>
+<tr>
+<td><code>idxml_score_type</code></td>
+<td>No</td>
+<td>Exact primary score type or hit metadata key to read; default <code>ProtLoom PEP</code>.</td>
+</tr>
+<tr>
+<td><code>easypqp_score_type</code></td>
+<td>No</td>
+<td>Meaning of the selected score: <code>PEP</code> or <code>q-value</code>; default <code>PEP</code>.</td>
+</tr>
+<tr>
+<td><code>psm_tsv</code></td>
+<td>Yes</td>
+<td>Cohort-level accepted PSM report.</td>
+</tr>
+<tr>
+<td><code>peptide_tsv</code></td>
+<td>Yes</td>
+<td>Cohort-level accepted peptide and protein report.</td>
+</tr>
+<tr>
+<td><code>output_dir</code></td>
+<td>Yes</td>
+<td>Root output directory.</td>
+</tr>
+<tr>
+<td><code>save_intermediate_files</code></td>
+<td>No</td>
+<td>Publish per-run pickle files; default <code>false</code>.</td>
+</tr>
+<tr>
+<td><code>work_dir</code></td>
+<td>No</td>
+<td>Nextflow work directory. Use scratch space for large mzML runs.</td>
+</tr>
+<tr>
+<td><code>docker_image_easypqp</code></td>
+<td>No</td>
+<td>EasyPQP image; default <code>ghcr.io/theboutroslab/easypqp:0.1.59</code>.</td>
+</tr>
+<tr>
+<td><code>docker_image_openms</code></td>
+<td>No</td>
+<td>IDRipper image; default <code>ghcr.io/theboutroslab/openms-thirdparty:3.5.0</code>.</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../how-to-run/" class="btn btn-neutral float-left" title="How to run"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../pipeline-steps/" class="btn btn-neutral float-right" title="Pipeline steps">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/TheBoutrosLab/pipeline-generate-ProteomicSpectralLibrary/tree/v1.1.1" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../how-to-run/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../pipeline-steps/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../js/version-select.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
