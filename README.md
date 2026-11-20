@@ -96,4 +96,9 @@ The [nf-test integration case](test/README.md) is configured for Slurm and exerc
 
 ## License
 
-This pipeline is licensed under GNU GPL version 2 or later. See [LICENSE](LICENSE).
+The code in pipeline-generate-ProteomicSpectralLibrary is licensed under the
+BSD 3-Clause License (`BSD-3-Clause`). See [LICENSE](LICENSE) for the terms.
+
+Shared code and third-party tools retain their respective licenses.
+
+Copyright (C) 2026 Sanford Burnham Prebys Medical Discovery Institute ("Boutros Lab")
